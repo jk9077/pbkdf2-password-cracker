@@ -10,15 +10,22 @@ with open("hashedPasswords.txt", "r") as file:
             "username": username,
             "hashed_password": hashed_password
         })
-for user in users:
-    print(user)
 
-password = "goodjob"
+words = ["password", "qwer", "hello", "apple", "ajou", "user", "abcd", "abc"]
+
+nums = ["1234", "0000", "1111", "2026", "2222"]
+
+possible_passwords = []
+
 salt = b"ajou"
 
-ex = hashlib.pbkdf2_hmac("sha1", password.encode(), salt, 500, 16).hex()
+for word in words:
+    for num in nums:
+        possible_passwords.append(word+num)
 
-for user in user:
-    if ex == user["hashed_password"]:
-        with open("Passwords.txt", "w") as result:
-            result.write(f"{user["number"]}:{user["username"]}:{ex}")
+for password in possible_passwords:
+    hashed = hashlib.pbkdf2_hmac("sha1", password.encode(), salt, 500, 16).hex()
+    for user in users:
+        if hashed == user["hashed_password"]:
+            with open("Passwords.txt", "w") as result:
+                result.write(f"{user["number"]}:{user["username"]}:{hashed}")
